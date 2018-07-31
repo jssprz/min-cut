@@ -1,0 +1,7 @@
+# exclude CLion project configuration
+.idea
+
+# exclude cmake-build folders
+cmake-build-debug
+cmake-build-release
+build
