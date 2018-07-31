@@ -1,0 +1,13 @@
+//
+// Created by Jesus on 6/27/2018.
+//
+
+// the configured options and settings for project
+#define min_cut_VERSION_MAJOR @min_cut_VERSION_MAJOR@
+#define min_cut_VERSION_MINOR @min_cut_VERSION_MINOR@
+#define TRIALS @TRIALS@
+
+#cmakedefine USE_DETERMINISTIC
+#cmakedefine USE_PROBABILISTIC
+#cmakedefine USE_HYBRID
+#cmakedefine USE_EXPERIMENTS
