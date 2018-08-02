@@ -6,6 +6,8 @@
 #define min_cut_VERSION_MAJOR @min_cut_VERSION_MAJOR@
 #define min_cut_VERSION_MINOR @min_cut_VERSION_MINOR@
 #define TRIALS @TRIALS@
+#define V_MIN_POW_2 @V_MIN_POW_2@
+#define V_MAX_POW_2 @V_MAX_POW_2@
 
 #cmakedefine USE_DETERMINISTIC
 #cmakedefine USE_PROBABILISTIC
