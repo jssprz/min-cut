@@ -23,7 +23,7 @@
 using namespace experiments;
 #endif
 
-void main(){
+int main(){
 
 #ifdef USE_EXPERIMENTS
 
@@ -45,4 +45,6 @@ void main(){
         auto G = random_graph<int>(V, 0.5);
         cout << "edges count: " << G.E.size() << endl;
     }
+
+    return 0;
 }

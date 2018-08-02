@@ -35,7 +35,7 @@ namespace experiments{
     template <typename ALG>
     void min_cut_test(ALG min_cut){
         vector<int> data(pow(2, V_MAX_POW_2));
-        std::iota(std::begin(V), std::end(V), 0);
+        std::iota(std::begin(data), std::end(data), 0);
 
         for (int trial = 0; trial < TRIALS; ++trial) {
             int n = pow(2, V_MIN_POW_2);
