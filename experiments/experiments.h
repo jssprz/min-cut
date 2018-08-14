@@ -45,7 +45,7 @@ namespace experiments{
                 // get probabilities values
                 double probs[5] = {0.2, 0.4, 0.6, 0.8, 1.0};
                 for (auto p: probs) {
-                    auto G = random_graph<int>(data, p);
+                    auto G = random_graph<int>(V, p);
 
                     auto cut = min_cut_function(G);
                 };
