@@ -5,12 +5,14 @@
 #include "config.h"
 #include <numeric>
 #include <iostream>
+#include <tuple>
 
 #ifdef USE_EXPERIMENTS
 #include "experiments/experiments.h"
 #endif
 
 #ifdef USE_DETERMINISTIC
+#include "deterministic-solution/min-cut-deterministic.h"
 #endif
 
 #ifdef USE_PROBABILISTIC
@@ -45,6 +47,8 @@ int main(){
         auto G = random_graph<int>(V, 0.5);
         cout << "edges count: " << G.E.size() << endl;
     }
+
+    min_cut_test<int>(&(min_cut::min_cut_deterministic<int>));
 
     return 0;
 }
