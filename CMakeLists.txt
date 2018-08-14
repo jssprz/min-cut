@@ -13,6 +13,27 @@ set(V_MAX_POW_2 "21" CACHE STRING "")
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED ON)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+if(UNIX)
+    set(BOOST_ROOT "/usr/local/src/boost_1_67_0" CACHE STRING "")
+    set(BOOST_LIBRARY_DIRS "/usr/local/lib" CACHE STRING "")
+    set(BOOST_INCLUDEDIR "/usr/local/src/boost_1_67_0" CACHE STRING "")
+elseif(WIN32)
+    set(BOOST_ROOT "C:/boost_1_67_0" CACHE STRING "")
+    set(BOOST_LIBRARY_DIRS "C:/boost_1_67_0/libs" CACHE STRING "")
+    set(BOOST_INCLUDEDIR "C:/boost_1_67_0" CACHE STRING "")
+endif()
+
+find_package(Boost 1.67.0 COMPONENTS REQUIRED)
+
+if(Boost_FOUND)
+    include_directories(${BOOST_INCLUDEDIR})
+    set (EXTRA_LIBS ${EXTRA_LIBS} ${BOOST_LIBRARY_DIRS})
+endif()
+
 # add the deterministic-solution library?
 option (USE_DETERMINISTIC "Use the deterministic implementation" ON)
 if (USE_DETERMINISTIC)
@@ -46,13 +67,19 @@ if (USE_EXPERIMENTS)
 endif (USE_EXPERIMENTS)
 
 message("OPTIONS INFO:")
-message("USE_DETERMINISTIC  " ${USE_DETERMINISTIC})
-message("USE_PROBABILISTIC  " ${USE_PROBABILISTIC})
-message("USE_HYBRID         " ${USE_HYBRID})
-message("USE_EXPERIMENTS    " ${USE_EXPERIMENTS})
-message("TRIALS             " ${TRIALS})
-message("V_MIN_POW_2        " ${V_MIN_POW_2})
-message("V_MAX_POW_2        " ${V_MAX_POW_2})
+message("Boost_USE_STATIC_LIBS    " ${Boost_USE_STATIC_LIBS})
+message("Boost_USE_MULTITHREADED  " ${Boost_USE_MULTITHREADED})
+message("Boost_USE_STATIC_RUNTIME " ${Boost_USE_STATIC_RUNTIME})
+message("BOOST_ROOT               " ${BOOST_ROOT})
+message("BOOST_LIBRARY_DIRS       " ${BOOST_LIBRARY_DIRS})
+message("BOOST_INCLUDEDIR         " ${BOOST_INCLUDEDIR})
+message("USE_DETERMINISTIC        " ${USE_DETERMINISTIC})
+message("USE_PROBABILISTIC        " ${USE_PROBABILISTIC})
+message("USE_HYBRID               " ${USE_HYBRID})
+message("USE_EXPERIMENTS          " ${USE_EXPERIMENTS})
+message("TRIALS                   " ${TRIALS})
+message("V_MIN_POW_2              " ${V_MIN_POW_2})
+message("V_MAX_POW_2              " ${V_MAX_POW_2})
 
 # configure a header file to pass some of the CMake settings
 # to the source code
@@ -66,7 +93,7 @@ configure_file (
 include_directories("${PROJECT_BINARY_DIR}")
 
 add_executable(min_cut main.cpp config.h.in experiments/experiments.h deterministic-solution/min-cut-deterministic.h hybrid-solution/min-cut-hybrid.h probabilistic-solution/min-cut-probabilistic.h graph.h)
-# target_link_libraries (priority_queues $(EXTRA_LIBS))
+target_link_libraries (min_cut $(EXTRA_LIBS))
 
 # add the install targets
 install (TARGETS min_cut DESTINATION bin)
