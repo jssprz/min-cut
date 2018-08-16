@@ -13,6 +13,7 @@
 
 #ifdef USE_DETERMINISTIC
 #include "deterministic-solution/min-cut-deterministic.h"
+using namespace min_cut;
 #endif
 
 #ifdef USE_PROBABILISTIC
@@ -40,15 +41,12 @@ int main(){
 
 #endif
 
-    vector<int> V(100);
-    std::iota(std::begin(V), std::end(V), 0);
+//    for (int i = 0; i < TRIALS; ++i)
+//        cout << "edges count: " << random_graph(100, 0.5).size() << endl;
 
-    for (int i = 0; i < TRIALS; ++i) {
-        auto G = random_graph<int>(V, 0.5);
-        cout << "edges count: " << G.E.size() << endl;
-    }
-
-    min_cut_test<int>(&(min_cut::min_cut_deterministic<int>));
+//    min_cut_test(&(stoer_wagner));
+//    min_cut_test(&(min_cut_max_flow));
+    min_cut_test(&(min_cut_max_flow), &(stoer_wagner));
 
     return 0;
 }

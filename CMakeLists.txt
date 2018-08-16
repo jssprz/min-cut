@@ -19,7 +19,7 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 
 if(UNIX)
     set(BOOST_ROOT "/usr/local/boost_1_67_0" CACHE STRING "")
-    set(BOOST_LIBRARY_DIRS "/usr/local/boost_1_67_0/libs" CACHE STRING "")
+    set(BOOST_LIBRARY_DIRS "/usr/local/lib" CACHE STRING "")
     set(BOOST_INCLUDEDIR "/usr/local/boost_1_67_0" CACHE STRING "")
 elseif(WIN32)
     set(BOOST_ROOT "C:/boost_1_67_0" CACHE STRING "")
@@ -94,7 +94,7 @@ configure_file (
 # so that we will find config.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_executable(min_cut main.cpp config.h.in experiments/experiments.h deterministic-solution/min-cut-deterministic.h hybrid-solution/min-cut-hybrid.h probabilistic-solution/min-cut-probabilistic.h graph.h)
+add_executable(min_cut main.cpp config.h.in experiments/experiments.h deterministic-solution/min-cut-deterministic.h hybrid-solution/min-cut-hybrid.h probabilistic-solution/min-cut-probabilistic.h graph.h deterministic-solution/min-cut-deterministic.cpp experiments/experiments.cpp)
 target_link_libraries (min_cut ${EXTRA_LIBS})
 
 # add the install targets

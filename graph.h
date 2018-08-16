@@ -24,6 +24,12 @@ namespace min_cut{
     typedef std::pair<unsigned int, unsigned int> edge;
     typedef std::tuple<unsigned int, unsigned int, double> w_edge;
 
+    struct edge_t
+    {
+        unsigned long first;
+        unsigned long second;
+    };
+
     template <typename T>
     struct Graph{
         std::vector<T> V;
