@@ -94,7 +94,7 @@ configure_file (
 # so that we will find config.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_executable(min_cut main.cpp config.h.in experiments/experiments.h deterministic-solution/min-cut-deterministic.h hybrid-solution/min-cut-hybrid.h probabilistic-solution/min-cut-probabilistic.h graph.h deterministic-solution/min-cut-deterministic.cpp experiments/experiments.cpp)
+add_executable(min_cut main.cpp config.h.in experiments/experiments.h deterministic-solution/min-cut-deterministic.h hybrid-solution/min-cut-hybrid.h probabilistic-solution/min-cut-probabilistic.h graph.h deterministic-solution/min-cut-deterministic.cpp probabilistic-solution/min-cut-probabilistic.cpp experiments/experiments.cpp)
 target_link_libraries (min_cut ${EXTRA_LIBS})
 
 # add the install targets

@@ -17,6 +17,8 @@ using namespace min_cut;
 #endif
 
 #ifdef USE_PROBABILISTIC
+#include "probabilistic-solution/min-cut-probabilistic.h"
+using namespace min_cut;
 #endif
 
 #ifdef USE_HYBRID
@@ -46,7 +48,9 @@ int main(){
 
 //    min_cut_test(&(stoer_wagner));
 //    min_cut_test(&(min_cut_max_flow));
-    min_cut_test(&(min_cut_max_flow), &(stoer_wagner));
+//    min_cut_test(&(karger));
+//    min_cut_test(&(min_cut_max_flow), &(stoer_wagner));
+    min_cut_test(&(min_cut_max_flow), &(karger));
 
     return 0;
 }
