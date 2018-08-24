@@ -6,9 +6,15 @@
 #define MIN_CUT_MIN_CUT_PROBABILISTIC_H
 
 #include "../graph.h"
+#include <boost/pending/disjoint_sets.hpp>
 
 namespace min_cut{
-    std::vector<edge_t> karger(unsigned long n, std::vector<edge_t> edges);
+    disjoint_sets<ulong*,ulong*> contract(unsigned long n, const std::vector<edge_t> &edges, unsigned long t,
+                                          std::vector<ulong> &rank, std::vector<ulong> &parent);
+
+    std::vector<edge_t> karger(unsigned long n, const std::vector<edge_t> &edges);
+
+    std::vector<edge_t> karger_iters(unsigned long n, const std::vector<edge_t> &edges);
 }
 
 #endif //MIN_CUT_MIN_CUT_PROBABILISTIC_H
