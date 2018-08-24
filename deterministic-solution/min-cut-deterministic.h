@@ -20,9 +20,9 @@ namespace min_cut {
 //        }
 //    }
 
-    std::vector<edge_t> min_cut_max_flow(unsigned long n, std::vector<edge_t> edges);
+    std::vector<edge_t> min_cut_max_flow(unsigned long n, const std::vector<edge_t> &edges);
 
-    std::vector<edge_t> stoer_wagner(unsigned long n, std::vector<edge_t> edges);
+    std::vector<edge_t> stoer_wagner(unsigned long n, const std::vector<edge_t> &edges);
 
 }
 
