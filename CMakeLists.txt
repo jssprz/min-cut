@@ -8,8 +8,8 @@ set (min_cut_VERSION_MINOR 0)
 # variables used for in experiments,
 # they define the number of trials to run in each experiment
 set(TRIALS "8" CACHE STRING "")
-set(V_MIN_POW_2 "15" CACHE STRING "")
-set(V_MAX_POW_2 "21" CACHE STRING "")
+set(V_MIN_POW_2 "10" CACHE STRING "")
+set(V_MAX_POW_2 "15" CACHE STRING "")
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -94,7 +94,7 @@ configure_file (
 # so that we will find config.h
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_executable(min_cut main.cpp config.h.in experiments/experiments.h deterministic-solution/min-cut-deterministic.h hybrid-solution/min-cut-hybrid.h probabilistic-solution/min-cut-probabilistic.h graph.h deterministic-solution/min-cut-deterministic.cpp probabilistic-solution/min-cut-probabilistic.cpp experiments/experiments.cpp)
+add_executable(min_cut main.cpp config.h.in experiments/experiments.h deterministic-solution/min-cut-deterministic.h hybrid-solution/min-cut-hybrid.h probabilistic-solution/min-cut-probabilistic.h graph.h deterministic-solution/min-cut-deterministic.cpp probabilistic-solution/min-cut-probabilistic.cpp experiments/experiments.cpp hybrid-solution/min-cut-hybrid.cpp)
 target_link_libraries (min_cut ${EXTRA_LIBS})
 
 # add the install targets
