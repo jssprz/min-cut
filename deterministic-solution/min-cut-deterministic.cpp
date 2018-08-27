@@ -69,9 +69,9 @@ namespace min_cut {
 
         for(ulong t = 1; t < n; ++t){
             //find min cut, a list of sources will be returned in s, and a list of sinks will be returned in t
-            flow = boykov_kolmogorov_max_flow(g, V[s], V[t], color_map(&color[0]).predecessor_map(&pred[0]));
 //            flow = push_relabel_max_flow(g, V[s], V[t], color_map(&color[0]).predecessor_map(&pred[0]));
 //            flow = edmonds_karp_max_flow(g, V[s], V[t], color_map(&color[0]).predecessor_map(&pred[0]));
+            flow = boykov_kolmogorov_max_flow(g, V[s], V[t], color_map(&color[0]).predecessor_map(&pred[0]));
 
             if(flow < max_flow) {
                 cut = vector<edge_t>();
@@ -82,12 +82,12 @@ namespace min_cut {
                         cut.push_back(e);
                     }
                 }
-                cout << "Max flow is: " << flow << endl;
+//                cout << "Max flow is: " << flow << endl;
                 max_flow = flow;
             }
         }
 
-        cout<<"max-flow-cut size: " <<cut.size()<<endl;
+//        cout<<"max-flow-cut size: " <<cut.size()<<endl;
         return cut;
     }
 
@@ -111,21 +111,6 @@ namespace min_cut {
         int w = stoer_wagner_min_cut(g, get(edge_weight, g), parity_map(parities));
 
         cout << "min-cut weight: " << w << endl;
-//
-//        cout << "One set of vertices consists of:" << endl;
-//        size_t i;
-//        for (i = 0; i < num_vertices(g); ++i) {
-//            if (get(parities, i))
-//                cout << i << endl;
-//        }
-//        cout << endl;
-//
-//        cout << "The other set of vertices consists of:" << endl;
-//        for (i = 0; i < num_vertices(g); ++i) {
-//            if (!get(parities, i))
-//                cout << i << endl;
-//        }
-//        cout << endl;
 
         vector<edge_t> cut;
         cut.reserve(w);

@@ -3,17 +3,16 @@
 //
 
 #include "min-cut-hybrid.h"
-#include "../probabilistic-solution/min-cut-probabilistic.h"
 #include "../deterministic-solution/min-cut-deterministic.h"
+#include "../probabilistic-solution/min-cut-probabilistic.h"
 #include <iostream>
 #include <algorithm>
+#include <boost/pending/disjoint_sets.hpp>
 
 using namespace std;
 
 namespace min_cut{
-    int k = 2;
-
-    std::vector<edge_t> contracts(unsigned long n, std::vector<edge_t> edges, unsigned long t,
+    void contracts(unsigned long n, const std::vector<edge_t> &edges, unsigned long t,
                                           vector<ulong> &rank, vector<ulong> &parent){
         disjoint_sets<ulong*,ulong*> ds(&rank[0], &parent[0]);
 
@@ -35,56 +34,50 @@ namespace min_cut{
                 vertices--;
                 ds.union_set(edges[i].first, edges[i].second);
             }
-
-            edges.erase(edges.begin()+i);
         }
-
-        return edges;
     }
 
-    std::vector<edge_t> karger_stein(unsigned long n, vector<edge_t> edges, vector<ulong> rank, vector<ulong> parent){
-        if(n <= 6){
+    int hybrid_t = 6;
+    void set_hybrid_t(int t){
+        hybrid_t = t;
+    }
+
+    std::vector<edge_t> karger_stein(unsigned long n, const vector<edge_t> &edges, vector<ulong> &rank, vector<ulong> &parent){
+        if(n <= hybrid_t){
             disjoint_sets<ulong*,ulong*> ds(&rank[0], &parent[0]);
             vector<edge_t> edges1;
-            vector<ulong> used_vertices;
+            vector<ulong> vertices_map(parent.size(), ULONG_MAX);
+            ulong index = 0;
             for(auto e : edges){
                 auto v1 = ds.find_set(e.first), v2 = ds.find_set(e.second);
                 if (v1 != v2) {
-                    auto begin_it = used_vertices.begin(), end_it = used_vertices.end();
-                    auto match_v1 = find(begin_it, end_it, v1), match_v2 = find(begin_it, end_it, v2);
-                    edge_t new_edge = {match_v1 - begin_it, match_v2 - begin_it};
-                    if(match_v1 == end_it) {
-                        used_vertices.push_back(v1);
-                        new_edge.first = used_vertices.size() - 1;
-                    }
-                    if(match_v2 == end_it) {
-                        used_vertices.push_back(v2);
-                        new_edge.second = used_vertices.size() - 1;
-                    }
+                    //auto begin_it = used_vertices.begin(), end_it = used_vertices.end();
+                    //auto match_v1 = find(begin_it, end_it, v1), match_v2 = find(begin_it, end_it, v2);
+                    //edge_t new_edge = {ulong(match_v1 - begin_it), ulong(match_v2 - begin_it)};
+                    edge_t new_edge = {vertices_map[v1], vertices_map[v2]};
+                    if(vertices_map[v1] == ULONG_MAX)
+                        new_edge.first = vertices_map[v1] = index++;
+                    if(vertices_map[v2] == ULONG_MAX)
+                        new_edge.second = vertices_map[v2] = index++;
                     edges1.push_back(new_edge);
                 }
             }
 
-//            vector<edge_t> min_cut, fast_min_cut = min_cut_max_flow(n, edges1);
-//            for(auto e: fast_min_cut){
-//                min_cut.push_back({used_vertices[e.first], used_vertices[e.second]});
-//            }
-//            return min_cut;
+            //is easy to obtain the edges of the original graph using the used_vertices vector
             return min_cut_max_flow(n, edges1);
         }
 
-        ulong t = 1 + n / sqrt(2);
+        auto t = ulong(1 + n / 1.414);
 
-        vector<edge_t> min_cut(edges.size());
-        for (int j = 0; j < k; ++j) {
-            auto new_rank = rank, new_parent = parent;
-            auto new_edges = contracts(n, edges, t + 1, new_rank, new_parent);
-            auto cut = karger_stein(t + 1, new_edges, new_rank, new_parent);
-            if(cut.size() < min_cut.size())
-                min_cut = cut;
-        }
+        auto new_rank = rank, new_parent = parent;
+        contracts(n, edges, t, new_rank, new_parent);
+        auto cut1 = karger_stein(t, edges, new_rank, new_parent);
 
-        return min_cut;
+        new_rank = rank, new_parent = parent;
+        contracts(n, edges, t, new_rank, new_parent);
+        auto cut2 = karger_stein(t, edges, new_rank, new_parent);
+
+        return cut1.size() <= cut2.size() ? cut1 : cut2;
     }
 
     std::vector<edge_t> karger_stein(unsigned long n, const std::vector<edge_t> &edges){
@@ -92,7 +85,76 @@ namespace min_cut{
         for (ulong j = 0; j < n; ++j)
             parent[j]=j;
         auto min_cut = karger_stein(n, edges, rank, parent);
-        cout << "karger-stain-min-cut size: " << min_cut.size() << endl;
+        //cout << "karger-stain-min-cut size: " << min_cut.size() << endl;
         return min_cut;
+    }
+
+    std::vector<edge_t> hybrid(unsigned long n, std::vector<edge_t> &edges){
+        auto rank = vector<ulong>(n), parent = vector<ulong>(n);
+        auto ds = contract(n, edges, hybrid_t, rank, parent);
+
+        vector<edge_t> edges1;
+        vector<ulong> vertices_map(parent.size(), ULONG_MAX);
+        ulong index = 0;
+        for(auto e : edges){
+            auto v1 = ds.find_set(e.first), v2 = ds.find_set(e.second);
+            if (v1 != v2) {
+                edge_t new_edge = {vertices_map[v1], vertices_map[v2]};
+                if(vertices_map[v1] == ULONG_MAX)
+                    new_edge.first = vertices_map[v1] = index++;
+                if(vertices_map[v2] == ULONG_MAX)
+                    new_edge.second = vertices_map[v2] = index++;
+                edges1.push_back(new_edge);
+            }
+        }
+
+        return min_cut_max_flow(index, edges1);
+    }
+
+
+
+    int hybrid_k = 5;
+    void set_hybrid_k(int k){
+        hybrid_k = k;
+    }
+
+    std::vector<edge_t> hybrid_iters(unsigned long n, const std::vector<edge_t> &edges){
+        vector<edge_t> min_cut(edges.size());
+        for (int k = 0; k < hybrid_k; ++k) {
+            auto edges_aux = edges;
+            auto cut = hybrid(n, edges_aux);
+            if (cut.size() < min_cut.size())
+                min_cut = cut;
+        }
+        return min_cut;
+    }
+
+    std::vector<edge_t> hybrid_iters2(unsigned long n, const std::vector<edge_t> &edges){
+        auto rank = vector<ulong>(n), parent = vector<ulong>(n);
+
+        auto min_contraction = vector<edge_t>(edges.size());
+
+        for (int j = 0; j < hybrid_k; ++j) {
+            auto edges_aux = edges;
+            auto ds = contract(n, edges_aux, hybrid_t, rank, parent);
+            vector<edge_t> edges1;
+            vector<ulong> vertices_map(parent.size(), ULONG_MAX);
+            ulong index = 0;
+            for (auto e : edges) {
+                auto v1 = ds.find_set(e.first), v2 = ds.find_set(e.second);
+                if (v1 != v2) {
+                    edge_t new_edge = {vertices_map[v1], vertices_map[v2]};
+                    if (vertices_map[v1] == ULONG_MAX)
+                        new_edge.first = vertices_map[v1] = index++;
+                    if (vertices_map[v2] == ULONG_MAX)
+                        new_edge.second = vertices_map[v2] = index++;
+                    edges1.push_back(new_edge);
+                }
+            }
+            if (edges1.size() < min_contraction.size())
+                min_contraction = edges1;
+        }
+
+        return min_cut_max_flow(hybrid_t, min_contraction);
     }
 }
