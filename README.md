@@ -1,4 +1,4 @@
-# min-cut
+# Min-Cut Algorithm
 
 This project contains the implementation of three types of algorithms to compute the min-cut in an undirected and
 unweighted graph
