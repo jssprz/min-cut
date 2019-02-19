@@ -1,11 +1,11 @@
-# min-cut-cmake
+# min-cut
 
 This project contains the implementation of three types of algorithms to compute the min-cut in an undirected and
-unweighted grapg
+unweighted graph
 ## Download
-Use the [git clone](https://gitlab.com/jssprz/min-cut-cmake.git) command to download this project:
+Use the [git clone](https://github.com/jssprz/min-cut.git) command to download this project:
 ```
-git clone https://gitlab.com/jssprz/priority-queues-cmake.git
+git clone https://github.com/jssprz/min-cut.git
 ```
 
 ## Requirements
