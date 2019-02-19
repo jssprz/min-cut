@@ -3,7 +3,7 @@
 This project contains the implementation of three types of algorithms to compute the min-cut in an undirected and
 unweighted graph
 ## Download
-Use the [git clone](https://github.com/jssprz/min-cut.git) command to download this project:
+Use the [git clone](https://git-scm.com/docs/git-clone) command to download this project:
 ```
 git clone https://github.com/jssprz/min-cut.git
 ```
